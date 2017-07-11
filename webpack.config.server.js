@@ -50,7 +50,10 @@ module.exports = {
       }, {
         test: /\.json$/,
         loader: 'json-loader',
-      },
+      }, {
+        test: /\.(svg|eot|ttf|woff|woff2)$/,
+        loader:'file-loader'
+      }
     ],
   },
   plugins: [

@@ -4,8 +4,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import App from './App';
 import { configureStore } from './store';
+import App from './App';
+
+import 'materialize-css/dist/js/materialize.min.js';
+import 'materialize-css/dist/css/materialize.min.css';
 
 // Initialize store
 const store = configureStore(window.__INITIAL_STATE__);

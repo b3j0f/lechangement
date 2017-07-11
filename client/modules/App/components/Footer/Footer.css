@@ -1,7 +1,8 @@
-.footer{
+.footer {
   text-align: center;
   padding: 56px 0;
   background-size: cover;
+  background: #FFF url('../../header-bk.png') center
 }
 
 .footer p{

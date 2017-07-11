@@ -1,8 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+// Import libs
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { IndexRoute, BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+
 // Import Style
-import styles from './App.css';
+import './App.css';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // Import Components
 import Helmet from 'react-helmet';
@@ -10,70 +16,75 @@ import DevTools from './components/DevTools';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 // Import Actions
-import { toggleAddPost } from './AppActions';
-import { switchLanguage } from '../../modules/Intl/IntlActions';
+import {
+    toggleAddVote, toggleAddReason, toggleAddUser,
+    toggleAddSolution,
+} from './actions';
 
-export class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isMounted: false };
-  }
+const muiTheme = getMuiTheme({
+    palette: {
+    },
+}, {
+    avatar: {
+        borderColor: null,
+    },
+    //userAgent: req.headers['user-agent'],
+});
 
-  componentDidMount() {
-    this.setState({isMounted: true}); // eslint-disable-line
-  }
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { isMounted: false };
+    }
 
-  toggleAddPostSection = () => {
-    this.props.dispatch(toggleAddPost());
-  };
+    componentDidMount() {
+        this.setState({isMounted: true}); // eslint-disable-line
+    }
 
-  render() {
-    return (
-      <div>
-        {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
-        <div>
-          <Helmet
-            title="MERN Starter - Blog App"
-            titleTemplate="%s - Blog App"
+    render() {
+        return (
+            <div>
+            {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
+            <Helmet
+            title="Le changement"
+            titleTemplate="%s"
             meta={[
-              { charset: 'utf-8' },
-              {
-                'http-equiv': 'X-UA-Compatible',
-                content: 'IE=edge',
-              },
-              {
-                name: 'viewport',
-                content: 'width=device-width, initial-scale=1',
-              },
+                { charset: 'utf-8' },
+                {
+                    'http-equiv': 'X-UA-Compatible',
+                    content: 'IE=edge',
+                },
+                {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1',
+                },
             ]}
-          />
-          <Header
-            switchLanguage={lang => this.props.dispatch(switchLanguage(lang))}
-            intl={this.props.intl}
-            toggleAddPost={this.toggleAddPostSection}
-          />
-          <div className={styles.container}>
+            />
+            <MuiThemeProvider muiTheme={muiTheme}>
+            <div className="body">
+            <header className="header">
+            <Header />
+            </header>
+            <main className="main">
+            <div className="container">
             {this.props.children}
-          </div>
-          <Footer />
-        </div>
-      </div>
-    );
-  }
+            </div>
+            </main>
+            <footer className="footer"><Footer /></footer>
+            </div>
+            </MuiThemeProvider>
+            </div>
+        );
+    }
 }
 
 App.propTypes = {
-  children: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+    children: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
-// Retrieve data from store as props
-function mapStateToProps(store) {
-  return {
-    intl: store.intl,
-  };
-}
-
-export default connect(mapStateToProps)(App);
+export default App;
